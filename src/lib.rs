@@ -5,3 +5,4 @@ mod p1781;
 mod p2256;
 mod p437;
 mod p451;
+mod p876;
