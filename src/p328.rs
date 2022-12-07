@@ -37,40 +37,26 @@ struct Solution {}
 impl Solution {
     #[allow(dead_code)]
     pub fn odd_even_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let mut odds = Vec::new();
-        let mut evens = Vec::new();
-        let mut count = 0;
-        let mut current = head;
-        loop {
-            if let Some(node) = current {
-                if count % 2 == 0 {
-                    odds.push(node.val);
-                } else {
-                    evens.push(node.val);
-                }
-                count += 1;
-                current = node.next;
+        let mut head = head;
+        let mut odd = Box::new(ListNode::new(-1));
+        let mut cur_odd = &mut odd;
+        let mut even = Box::new(ListNode::new(-1));
+        let mut cur_even = &mut even;
+        let mut is_odd = true;
+        while head.is_some() {
+            if is_odd {
+                cur_odd.next = head;
+                cur_odd = cur_odd.next.as_mut()?;
+                head = cur_odd.next.take();
             } else {
-                break;
+                cur_even.next = head;
+                cur_even = cur_even.next.as_mut()?;
+                head = cur_even.next.take();
             }
+            is_odd = !is_odd;
         }
-        let mut list = None;
-        for v in evens.iter().rev() {
-            let node = ListNode {
-                val: *v,
-                next: list,
-            };
-            list = Some(Box::new(node));
-        }
-
-        for v in odds.iter().rev() {
-            let node = ListNode {
-                val: *v,
-                next: list,
-            };
-            list = Some(Box::new(node));
-        }
-        list
+        cur_odd.next = even.next;
+        return odd.next;
     }
 }
 
