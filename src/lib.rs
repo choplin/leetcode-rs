@@ -7,6 +7,7 @@ mod p2256;
 mod p328;
 mod p437;
 mod p451;
+mod p834;
 mod p841;
 mod p876;
 mod p886;
