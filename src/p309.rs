@@ -1,39 +1,32 @@
 struct Solution {}
 
+use std::cmp::max;
+
 impl Solution {
-    #[allow(dead_code)]
+    #[allow(unused)]
     pub fn max_profit(prices: Vec<i32>) -> i32 {
-        if prices.len() == 1 {
+        if prices.len() < 2 {
             return 0;
         }
 
-        let mut maxes = vec![0; prices.len()];
+        let cooldown = 1;
+        let mut profits = vec![0; prices.len()];
+        let mut max_profit = 0;
+        let mut tmp_max = profits[0] - prices[0];
 
-        maxes[0] = 0;
-        maxes[1] = std::cmp::max(prices[1] - prices[0], 0);
-
-        for i in 2..prices.len() {
-            let max_for_sell = (0..i)
-                .map(|j| {
-                    if j < 2 {
-                        prices[i] - prices[j]
-                    } else {
-                        maxes[j - 2] + prices[i] - prices[j]
-                    }
-                })
-                .max()
-                .unwrap();
-            maxes[i] = *vec![
-                maxes[i - 2], // buy
-                maxes[i - 1], // cooldown
-                max_for_sell, // sell
-            ]
-            .iter()
-            .max()
-            .unwrap();
+        for i in 1..prices.len() {
+            profits[i] = max(profits[i - 1], tmp_max + prices[i]);
+            tmp_max = max(
+                tmp_max,
+                if i > cooldown {
+                    profits[i - 1 - cooldown]
+                } else {
+                    profits[i - 1]
+                } - prices[i],
+            );
+            max_profit = max(profits[i], max_profit);
         }
-
-        maxes[prices.len() - 1]
+        max_profit
     }
 }
 
