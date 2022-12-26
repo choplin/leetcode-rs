@@ -9,6 +9,7 @@ mod p309;
 mod p328;
 mod p437;
 mod p451;
+mod p55;
 mod p834;
 mod p841;
 mod p876;
